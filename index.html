@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>IDEX - Registro y Login</title>
+  <script type="module">
+    // Importa Firebase desde CDN
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    // Configuración de Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDVBhyLUum-8Y4hgZIPmDO_8iVsGIfp2xA",
+      authDomain: "idex-backend.firebaseapp.com",
+      databaseURL: "https://idex-backend-default-rtdb.firebaseio.com",
+      projectId: "idex-backend",
+      storageBucket: "idex-backend.appspot.com",
+      messagingSenderId: "796387695466",
+      appId: "1:796387695466:web:7ec2d21df1d24c7bd1a313"
+    };
+
+    // Inicializa Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase();
+
+    // Registro de usuario
+    window.registerUser = () => {
+      const user = document.getElementById("user").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      set(ref(db, "users/" + user), {
+        username: user,
+        email: email,
+        password: password
+      }).then(() => {
+        alert("Usuario registrado");
+      }).catch((error) => {
+        alert("Error: " + error);
+      });
+    };
+
+    // Inicio de sesión
+    window.loginUser = () => {
+      const user = document.getElementById("loginUser").value;
+      const password = document.getElementById("loginPassword").value;
+      const dbRef = ref(db);
+      get(child(dbRef, "users/" + user)).then((snapshot) => {
+        if (snapshot.exists()) {
+          if (snapshot.val().password === password) {
+            alert("Inicio de sesión exitoso");
+          } else {
+            alert("Contraseña incorrecta");
+          }
+        } else {
+          alert("Usuario no encontrado");
+        }
+      });
+    };
+  </script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f5f5; }
+    header { background: #0071e3; color: #fff; padding: 1rem; text-align: center; }
+    main { max-width: 800px; margin: 2rem auto; padding: 1rem; background: #fff; border-radius: 8px; box-shadow: 0 0 10px #ccc; }
+    h2 { border-bottom: 1px solid #ddd; padding-bottom: 0.5rem; }
+    input, button { display: block; width: 100%; margin-top: 0.5rem; padding: 0.5rem; font-size: 1rem; }
+    button { background: #0071e3; color: #fff; border: none; cursor: pointer; }
+    button:hover { background: #005bb5; }
+    .section { margin-bottom: 2rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>IDEX</h1>
+  </header>
+  <main>
+    <div class="section">
+      <h2>Registro de Usuario</h2>
+      <input type="text" id="user" placeholder="Usuario" />
+      <input type="email" id="email" placeholder="Correo electrónico" />
+      <input type="password" id="password" placeholder="Contraseña" />
+      <button onclick="registerUser()">Registrar</button>
+    </div>
+
+    <div class="section">
+      <h2>Iniciar Sesión</h2>
+      <input type="text" id="loginUser" placeholder="Usuario" />
+      <input type="password" id="loginPassword" placeholder="Contraseña" />
+      <button onclick="loginUser()">Iniciar Sesión</button>
+    </div>
+
+    <div class="section">
+      <h2>Planes de Membresía</h2>
+      <ul>
+        <li>Básico - Acceso limitado</li>
+        <li>Pro - Acceso completo</li>
+        <li>Premium - Soporte personalizado</li>
+      </ul>
+    </div>
+  </main>
+</body>
+</html>
