@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>IDEX - Registro, Login y Panel</title>
+  <script type="module">
+    // Importa los SDKs necesarios de Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+    // Configuración del proyecto de Firebase (rellenada automáticamente)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDVBhyLUum-8Y4hgZIPmDO_8iVsGIfp2xA",
+      authDomain: "idex-backend.firebaseapp.com",
+      databaseURL: "https://idex-backend-default-rtdb.firebaseio.com",
+      projectId: "idex-backend",
+      storageBucket: "idex-backend.appspot.com",
+      messagingSenderId: "796387695466",
+      appId: "1:796387695466:web:7ec2d21df1d24c7bd1a313"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase();
+
+    // Registro
+    window.registrarUsuario = function () {
+      const user = document.getElementById("reg-usuario").value;
+      const email = document.getElementById("reg-email").value;
+      const password = document.getElementById("reg-password").value;
+      if (!user || !email || !password) return alert("Completa todos los campos");
+
+      set(ref(db, "usuarios/" + user), {
+        usuario: user,
+        email: email,
+        contraseña: password
+      }).then(() => {
+        alert("Usuario registrado exitosamente");
+        document.getElementById("reg-usuario").value = "";
+        document.getElementById("reg-email").value = "";
+        document.getElementById("reg-password").value = "";
+      }).catch((error) => {
+        alert("Error al registrar: " + error);
+      });
+    };
+
+    // Inicio de sesión
+    window.iniciarSesion = function () {
+      const user = document.getElementById("login-usuario").value;
+      const password = document.getElementById("login-password").value;
+      if (!user || !password) return alert("Completa todos los campos");
+
+      const dbRef = ref(getDatabase());
+      get(child(dbRef, "usuarios/" + user)).then((snapshot) => {
+        if (snapshot.exists()) {
+          const datos = snapshot.val();
+          if (datos.contraseña === password) {
+            alert("Inicio de sesión exitoso");
+            localStorage.setItem("usuarioActivo", user);
+            window.location.href = "#panel";
+          } else {
+            alert("Contraseña incorrecta");
+          }
+        } else {
+          alert("Usuario no encontrado");
+        }
+      }).catch((error) => {
+        alert("Error al iniciar sesión: " + error);
+      });
+    };
+
+    // Cierre de sesión
+    window.cerrarSesion = function () {
+      localStorage.removeItem("usuarioActivo");
+      window.location.href = "#inicio";
+    };
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    section {
+      margin-bottom: 40px;
+    }
+    input {
+      display: block;
+      margin: 10px 0;
+      padding: 8px;
+      width: 250px;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #0071e3;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    h2 {
+      color: #333;
+    }
+    .membresias, .graficas {
+      margin-top: 30px;
+      padding: 20px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <section id="inicio">
+    <h2>Inicio</h2>
+    <p>Bienvenido a IDEX.</p>
+  </section>
+
+  <section id="registro">
+    <h2>Registro de Usuario</h2>
+    <input type="text" id="reg-usuario" placeholder="Usuario" />
+    <input type="email" id="reg-email" placeholder="Correo electrónico" />
+    <input type="password" id="reg-password" placeholder="Contraseña" />
+    <button onclick="registrarUsuario()">Registrar</button>
+  </section>
+
+  <section id="login">
+    <h2>Iniciar Sesión</h2>
+    <input type="text" id="login-usuario" placeholder="Usuario" />
+    <input type="password" id="login-password" placeholder="Contraseña" />
+    <button onclick="iniciarSesion()">Iniciar Sesión</button>
+  </section>
+
+  <section class="membresias" id="planes">
+    <h2>Planes de Membresía</h2>
+    <ul>
+      <li>Básico - Acceso limitado</li>
+      <li>Pro - Acceso completo</li>
+      <li>Premium - Soporte personalizado</li>
+    </ul>
+  </section>
+
+  <section class="graficas" id="panel">
+    <h2>Panel de Usuario</h2>
+    <p>Gráficas interactivas, filtros y más</p>
+    <button onclick="cerrarSesion()">Cerrar Sesión</button>
+  </section>
+</body>
+</html>
