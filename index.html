@@ -1,0 +1,409 @@
+
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>IDEX - Datos Históricos</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f5f5f7; color: #1d1d1f; margin: 0; padding: 0; }
+        header#header { background-color: #fff; padding: 20px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: block; position: relative; }
+        header img { height: 50px; vertical-align: middle; }
+        header h1 { margin: 10px 0 0; font-size: 18px; font-weight: 600; display: inline-block; vertical-align: middle; }
+        #btnLogin { position: absolute; top: 20px; right: 20px; padding: 10px 20px; background-color: #0071e3; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #descripcionIDEX { text-align: center; padding: 10px 20px; max-width: 800px; margin: auto; font-size: 16px; color: #333; display: block; }
+        .container { display: none; flex: max-width: 1200px; margin: 40px auto; background-color: #fff; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .main { padding: 40px; flex: 3; }
+        .sidebar { padding: 40px; background-color: #f9f9f9; flex: 2; border-left: 1px solid #e0e0e0; overflow-y: auto; }
+        .landing { display: flex; justify-content: center; padding: 50px; }
+        .card { background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin: 20px; width: 250px; text-align: center; }
+        .card h2 { margin-top: 0; }
+        .card button { padding: 10px 20px; background-color: #0071e3; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
+        .card button:hover { background-color: #005bb5; }
+        .login-container, .registro-container { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #f5f5f7; }
+        .login-box, .registro-box { background-color: #fff; padding: 40px 60px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; width: 300px; }
+        input[type="text"], input[type="password"], input[type="email"] { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
+        button { padding: 12px 20px; background-color: #0071e3; color: #fff; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; transition: background-color 0.3s ease; }
+        button:hover { background-color: #005bb5; }
+        .meses-scroll { height: 200px; overflow-y: auto; padding: 10px; border: 1px solid #ccc; border-radius: 10px; margin-bottom: 20px; background-color: #fff; }
+        .accordion { background-color: #f1f1f1; cursor: pointer; padding: 10px; width: 100%; border: none; text-align: left; outline: none; font-size: 16px; border-radius: 8px; margin-top: 10px; transition: background-color 0.3s, color 0.3s; }
+        .accordion.active { background-color: #0071e3; color: white; }
+        .panel { padding: 0 10px; display: none; background-color: #fff; overflow: hidden; }
+        canvas { margin-top: 20px; }
+    
+.accordion {
+    color: black;
+}
+</style>
+</head>
+<body>
+<header id="header">
+<img alt="IDEX Logo" src="logo.png"/><h1>Datos que se transforman en poder</h1>
+<button id="btnLogin" onclick="mostrarLogin()">Iniciar Sesión</button>
+</header>
+<div id="descripcionIDEX">
+<p>IDEX es una plataforma avanzada de visualización de datos históricos que permite a empresas y profesionales acceder a información clave sobre precios y tendencias de commodities. Con análisis intuitivos y acceso sencillo a datos relevantes, IDEX ayuda a tomar decisiones informadas y estratégicas.</p>
+</div>
+<div class="landing" id="landing">
+<div class="card">
+<h2>Suscripción</h2>
+<p>Acceso a gráficas y descargas.</p>
+<p>Análisis avanzado de datos.</p>
+<p>Soporte premium.</p>
+<p>99 MXN / mes</p>
+<button onclick="redirigirAStripe()">Suscribirme</button>
+</div>
+</div>
+<div class="login-container" id="login">
+<div class="login-box">
+<img alt="IDEX Logo" src="logo.png" style="height: 60px; margin-bottom: 20px;"/>
+<h2>Iniciar sesión</h2>
+<input id="loginUser" placeholder="Usuario" type="text"/>
+<input id="loginPassword" placeholder="Contraseña" type="password"/>
+<button onclick="loginUser()">Entrar</button>
+<button onclick="mostrarRegistro()">Crear cuenta</button>
+<p id="error" style="color: red; display: none;">Usuario o contraseña incorrectos</p>
+</div>
+</div>
+<div class="registro-container" id="registro">
+<div class="registro-box">
+<img alt="IDEX Logo" src="logo.png" style="height: 60px; margin-bottom: 20px;"/>
+<h2>Crear Cuenta</h2>
+<input id="user" placeholder="Usuario" type="text"/>
+<input id="email" placeholder="Correo electrónico" type="email"/>
+<input id="loginPassword" placeholder="Contraseña" type="password"/>
+<button onclick="registerUser()">Registrar</button>
+<button onclick="mostrarLogin()">Volver al login</button>
+</div>
+</div>
+<div class="container" id="contenido">
+<div class="main">
+<h2>Acceso a datos históricos</h2>
+<label><input checked="" id="todosMeses" onchange="toggleTodosMeses(this)" type="checkbox"/> Todos los meses</label>
+<div class="meses-scroll" id="filtroMes"></div>
+<div id="graficos"></div>
+</div>
+<div class="sidebar">
+<h3>Selecciona los commodities</h3>
+<label><input checked="" id="todosCommodities" onchange="toggleTodosCommodities(this)" type="checkbox"/> Todos los commodities</label>
+<div id="filtroCommodities"></div>
+<button onclick="actualizarGraficos()">Actualizar Gráficas</button>
+</div>
+</div>
+<script>
+// Cambios integrados: descripción solo en página de planes, botón cerrar sesión, registro funcional, color negro en toggles, y márgenes
+
+    window.mostrarLogin = () => {
+        document.getElementById('landing').style.display = 'none';
+        document.getElementById('login').style.display = 'flex';
+        document.getElementById('registro').style.display = 'none';
+        document.getElementById('header').style.display = 'none';
+        document.getElementById('contenido').style.display = 'none';
+        document.getElementById('descripcionIDEX').style.display = 'none';
+    };
+
+    window.mostrarRegistro = () => {
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('registro').style.display = 'flex';
+    };
+
+// Se agregó persistencia de usuarios en localStorage
+
+        alert('Usuario registrado exitosamente');
+        mostrarLogin();
+    } else {
+        alert('Por favor completa todos los campos');
+    }
+}
+function cerrarSesion() {
+    document.getElementById('contenido').style.display = 'none';
+    document.getElementById('landing').style.display = 'flex';
+    document.getElementById('descripcionIDEX').style.display = 'block';
+    document.getElementById('btnLogin').style.display = 'inline-block';
+    document.getElementById('btnLogout').style.display = 'none';
+}
+
+let listaCommodities = {
+    "Energía": ["Energia Electrica MEX - Tarifa DAC (MXN/kWh)", "Petroleo Brent (USD/bbl)", "Gas Natural MEX (MXN)"],
+    "Ingredientes": ["Aceite de Palma (USD/mt)", "Aceite de Soya (USD/mt)", "Aceite de Girasol (USD/mt)"],
+    "Transporte": ["Flete Transatlantic (USD/contenedor)", "Flete Pacific (USD/contenedor)", "Diesel US (USD per Gallon)"],
+    "Materia Prima": ["Polietileno (HDPE) ($USD/KG)", "Petróleo Brent (USD/bbl)", "Pulp and Paper Unbleached Kraft (Index)"],
+    "Divisas": ["Tipo de Cambio USD/MXN"],
+    "Macroeconómicos": ["Mano de Obra MEX (MXN)"]
+};
+function mostrarLogin() {
+    document.getElementById('landing').style.display = 'none';
+    document.getElementById('login').style.display = 'flex';
+    document.getElementById('registro').style.display = 'none';
+    document.getElementById('header').style.display = 'none';
+    document.getElementById('contenido').style.display = 'none';
+    document.getElementById('descripcionIDEX').style.display = 'none';
+}
+function mostrarRegistro() {
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('registro').style.display = 'flex';
+}
+    if(user === "admin" && pass === "1234") {
+        document.getElementById('login').style.display = "none";
+        document.getElementById('contenido').style.display = "flex";
+        document.getElementById('header').style.display = "block";
+        document.getElementById('descripcionIDEX').style.display = 'none';
+        document.getElementById('btnLogin').style.display = 'none';  // Ocultamos el botón "Iniciar sesión"
+        inicializarFiltros();
+    } else {
+        document.getElementById('error').textContent = "Usuario o contraseña incorrectos";
+        document.getElementById('error').style.display = "block";
+    }
+}
+
+function inicializarFiltros() {
+    const meses = ["May 2024","Jun 2024","Jul 2024","Ago 2024","Sep 2024","Oct 2024","Nov 2024","Dic 2024","Ene 2025","Feb 2025","Mar 2025","Abr 2025","May 2025"];
+    const filtroMes = document.getElementById('filtroMes');
+    filtroMes.innerHTML = '';
+    meses.forEach(mes => {
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = mes;
+        checkbox.checked = true;
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(" " + mes));
+        filtroMes.appendChild(label);
+        filtroMes.appendChild(document.createElement('br'));
+    });
+    const filtroCom = document.getElementById('filtroCommodities');
+    filtroCom.innerHTML = '';
+    for (let familia in listaCommodities) {
+        const button = document.createElement('button');
+        button.className = 'accordion';
+        button.textContent = familia;
+        filtroCom.appendChild(button);
+        const panel = document.createElement('div');
+        panel.className = 'panel';
+        listaCommodities[familia].forEach(nombre => {
+            const label = document.createElement('label');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = nombre;
+            checkbox.checked = true;
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(" " + nombre));
+            panel.appendChild(label);
+            panel.appendChild(document.createElement('br'));
+        });
+        filtroCom.appendChild(panel);
+    }
+    inicializarAcordeones();
+    actualizarGraficos();
+}
+function inicializarAcordeones() {
+    const acc = document.getElementsByClassName("accordion");
+    for (let i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            const panel = this.nextElementSibling;
+            panel.style.display = (panel.style.display === "block") ? "none" : "block";
+        });
+    }
+}
+function toggleTodosMeses(source) {
+    const checkboxes = document.querySelectorAll('#filtroMes input[type="checkbox"]');
+    checkboxes.forEach(cb => cb.checked = source.checked);
+}
+function toggleTodosCommodities(source) {
+    const checkboxes = document.querySelectorAll('.panel input[type="checkbox"]');
+    checkboxes.forEach(cb => cb.checked = source.checked);
+}
+function actualizarGraficos() {
+    const selectedMeses = Array.from(document.querySelectorAll('#filtroMes input:checked')).map(cb => cb.value);
+    const selectedCommodities = Array.from(document.querySelectorAll('.panel input:checked')).map(cb => cb.value);
+    fetch('datos_commodities.json').then(response => response.json()).then(data => {
+        const contenedor = document.getElementById('graficos');
+        contenedor.innerHTML = '';
+        const meses = ["May 2024","Jun 2024","Jul 2024","Ago 2024","Sep 2024","Oct 2024","Nov 2024","Dic 2024","Ene 2025","Feb 2025","Mar 2025","Abr 2025","May 2025"];
+        const mesesSeleccionados = selectedMeses.length === 0 ? meses : selectedMeses;
+        Object.entries(data).forEach(([nombre, valores]) => {
+            if (!selectedCommodities.includes(nombre)) return;
+            const serie = valores['Precio'] || valores['Valor'];
+            if (!serie) return;
+            const indices = mesesSeleccionados.map(mes => meses.indexOf(mes)).filter(idx => idx !== -1);
+            const mesesFiltrados = indices.map(i => meses[i]);
+            const valoresFiltrados = indices.map(i => serie[i]);
+            const canvas = document.createElement('canvas');
+            contenedor.appendChild(canvas);
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, { type: 'line', data: { labels: mesesFiltrados, datasets: [{ label: nombre, data: valoresFiltrados, borderColor: '#0071e3', fill: false }] }, options: { responsive: true, scales: { y: { beginAtZero: false } } } });
+        });
+    }).catch(error => {
+        console.error('Error al cargar datos:', error);
+    });
+}
+</script>
+<script>
+  window.mostrarLogin = function () {
+    document.getElementById('landing').style.display = 'none';
+    document.getElementById('login').style.display = 'flex';
+    document.getElementById('registro').style.display = 'none';
+    document.getElementById('header').style.display = 'none';
+    document.getElementById('contenido').style.display = 'none';
+    document.getElementById('descripcionIDEX').style.display = 'none';
+  };
+
+  window.mostrarRegistro = function () {
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('registro').style.display = 'flex';
+  };
+
+  window.cerrarSesion = function () {
+    document.getElementById('contenido').style.display = 'none';
+    document.getElementById('landing').style.display = 'flex';
+    document.getElementById('descripcionIDEX').style.display = 'block';
+    document.getElementById('btnLogin').style.display = 'inline-block';
+    document.getElementById('btnLogout').style.display = 'none';
+  };
+
+  function inicializarAcordeones() {
+    const acc = document.getElementsByClassName("accordion");
+    for (let i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function () {
+        this.classList.toggle("active");
+        const panel = this.nextElementSibling;
+        panel.style.display = (panel.style.display === "block") ? "none" : "block";
+      });
+    }
+  }
+
+  window.toggleTodosMeses = function (source) {
+    const checkboxes = document.querySelectorAll('#filtroMes input[type="checkbox"]');
+    checkboxes.forEach(cb => cb.checked = source.checked);
+  };
+
+  window.toggleTodosCommodities = function (source) {
+    const checkboxes = document.querySelectorAll('.panel input[type="checkbox"]');
+    checkboxes.forEach(cb => cb.checked = source.checked);
+  };
+
+  window.actualizarGraficos = function () {
+    const selectedMeses = Array.from(document.querySelectorAll('#filtroMes input:checked')).map(cb => cb.value);
+    const selectedCommodities = Array.from(document.querySelectorAll('.panel input:checked')).map(cb => cb.value);
+    fetch('datos_commodities.json').then(response => response.json()).then(data => {
+      const contenedor = document.getElementById('graficos');
+      contenedor.innerHTML = '';
+      const meses = ["May 2024","Jun 2024","Jul 2024","Ago 2024","Sep 2024","Oct 2024","Nov 2024","Dic 2024","Ene 2025","Feb 2025","Mar 2025","Abr 2025","May 2025"];
+      const mesesSeleccionados = selectedMeses.length === 0 ? meses : selectedMeses;
+      Object.entries(data).forEach(([nombre, valores]) => {
+        if (!selectedCommodities.includes(nombre)) return;
+        const serie = valores['Precio'] || valores['Valor'];
+        if (!serie) return;
+        const indices = mesesSeleccionados.map(mes => meses.indexOf(mes)).filter(idx => idx !== -1);
+        const mesesFiltrados = indices.map(i => meses[i]);
+        const valoresFiltrados = indices.map(i => serie[i]);
+        const canvas = document.createElement('canvas');
+        contenedor.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: mesesFiltrados,
+            datasets: [{
+              label: nombre,
+              data: valoresFiltrados,
+              borderColor: '#0071e3',
+              fill: false
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: { beginAtZero: false }
+            }
+          }
+        });
+      });
+    }).catch(error => {
+      console.error('Error al cargar datos:', error);
+    });
+  };
+
+  window.inicializarFiltros = function () {
+    const meses = ["May 2024","Jun 2024","Jul 2024","Ago 2024","Sep 2024","Oct 2024","Nov 2024","Dic 2024","Ene 2025","Feb 2025","Mar 2025","Abr 2025","May 2025"];
+    const filtroMes = document.getElementById('filtroMes');
+    filtroMes.innerHTML = '';
+    meses.forEach(mes => {
+      const label = document.createElement('label');
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.value = mes;
+      checkbox.checked = true;
+      label.appendChild(checkbox);
+      label.appendChild(document.createTextNode(" " + mes));
+      filtroMes.appendChild(label);
+      filtroMes.appendChild(document.createElement('br'));
+    });
+
+    const listaCommodities = {
+      "Energía": ["Energia Electrica MEX - Tarifa DAC (MXN/kWh)", "Petroleo Brent (USD/bbl)", "Gas Natural MEX (MXN)"],
+      "Ingredientes": ["Aceite de Palma (USD/mt)", "Aceite de Soya (USD/mt)", "Aceite de Girasol (USD/mt)"],
+      "Transporte": ["Flete Transatlantic (USD/contenedor)", "Flete Pacific (USD/contenedor)", "Diesel US (USD per Gallon)"],
+      "Materia Prima": ["Polietileno (HDPE) ($USD/KG)", "Petróleo Brent (USD/bbl)", "Pulp and Paper Unbleached Kraft (Index)"],
+      "Divisas": ["Tipo de Cambio USD/MXN"],
+      "Macroeconómicos": ["Mano de Obra MEX (MXN)"]
+    };
+
+    const filtroCom = document.getElementById('filtroCommodities');
+    filtroCom.innerHTML = '';
+    for (let familia in listaCommodities) {
+      const button = document.createElement('button');
+      button.className = 'accordion';
+      button.textContent = familia;
+      filtroCom.appendChild(button);
+      const panel = document.createElement('div');
+      panel.className = 'panel';
+      listaCommodities[familia].forEach(nombre => {
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = nombre;
+        checkbox.checked = true;
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(" " + nombre));
+        panel.appendChild(label);
+        panel.appendChild(document.createElement('br'));
+      });
+      filtroCom.appendChild(panel);
+    }
+    inicializarAcordeones();
+    window.actualizarGraficos();
+  };
+</script>
+<script>
+function loginUser() {
+  const user = document.getElementById("loginUser").value;
+  const password = document.getElementById("loginPassword").value;
+
+  const db = firebase.database();
+  db.ref("users/" + user).get().then((snapshot) => {
+    if (snapshot.exists()) {
+      if (snapshot.val().password === password) {
+        localStorage.setItem("usuarioActivo", user);
+        alert("Inicio de sesión exitoso");
+
+        document.getElementById('login').style.display = "none";
+        document.getElementById('contenido').style.display = "flex";
+        document.getElementById('header').style.display = "block";
+        document.getElementById('descripcionIDEX').style.display = 'none';
+        document.getElementById('btnLogin').style.display = 'none';
+        document.getElementById('landing').style.display = 'none';
+
+        inicializarFiltros();
+      } else {
+        alert("Contraseña incorrecta");
+      }
+    } else {
+      alert("Usuario no encontrado");
+    }
+  });
+}
+</script></body>
+</html>
