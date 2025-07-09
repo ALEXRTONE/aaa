@@ -458,5 +458,30 @@ function loginUser() {
     alert("Error al conectar con Firebase: " + error.message);
   });
 }
+        <script>
+function registerUser() {
+  const user = document.getElementById("user").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("loginPassword").value;
+
+  if (!user || !email || !password) {
+    alert("Por favor completa todos los campos.");
+    return;
+  }
+
+  firebase.database().ref("users/" + user).set({
+    username: user,
+    email: email,
+    password: password,
+    suscripcion: false
+  }).then(() => {
+    alert("Usuario registrado exitosamente");
+    mostrarLogin();
+  }).catch((error) => {
+    alert("Error al registrar: " + error.message);
+  });
+}
+</script>
+
 </script></body>
 </html>
