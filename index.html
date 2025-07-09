@@ -426,7 +426,7 @@ function mostrarSuscripcion() {
   document.getElementById('login').style.display = "none";
   document.getElementById('landing').style.display = "flex";
 }
-</script><script>
+<script>
 function loginUser() {
   const user = document.getElementById("loginUser").value;
   const password = document.getElementById("loginPassword").value;
@@ -458,8 +458,9 @@ function loginUser() {
     alert("Error al conectar con Firebase: " + error.message);
   });
 }
-
-function registerUser() {
+</script>
+<script>
+window.registerUser = function () {
   const user = document.getElementById("user").value;
   const email = document.getElementById("email").value;
   const password = document.getElementById("loginPassword").value;
@@ -482,6 +483,7 @@ function registerUser() {
   });
 }
 </script>
+
 
 </script></body>
 </html>
