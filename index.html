@@ -822,18 +822,19 @@ function inicializarEstructuraCostos() {
     fechaInicial.appendChild(opt1);
     fechaFinal.appendChild(opt2);
   });
-}
-
-function calcularEstructura() {
+<script>
+async function calcularEstructura() {
   const ponderaciones = Array.from(document.querySelectorAll(".ponderacion")).map(input => {
     return {
       nombre: input.getAttribute("data-nombre"),
       ponderacion: parseFloat(input.value) || 0
     };
   });
+
   const fechaInicial = document.getElementById("fechaInicial").value;
   const fechaFinal = document.getElementById("fechaFinal").value;
 
+  const meses = ["May 2024", "Jun 2024", "Jul 2024", "Ago 2024", "Sep 2024", "Oct 2024", "Nov 2024", "Dic 2024", "Ene 2025", "Feb 2025", "Mar 2025", "Abr 2025"];
   const i = meses.indexOf(fechaInicial);
   const j = meses.indexOf(fechaFinal);
 
@@ -842,21 +843,27 @@ function calcularEstructura() {
     return;
   }
 
+  const response = await fetch("datos_commodities.json");
+  const data = await response.json();
+
   let total = 0;
   let suma = 0;
 
   ponderaciones.forEach(item => {
-    const arr = cambiosMensuales[item.nombre];
-    const v1 = arr[i];
-    const v2 = arr[j];
-    const cambio = ((v2 - v1) / v1) * 100;
-    total += (item.ponderacion / 100) * cambio;
+    const valores = data[item.nombre]?.Precio || data[item.nombre]?.Valor;
+    if (!valores || valores.length <= Math.max(i, j)) return;
+
+    const precioInicial = valores[i];
+    const precioFinal = valores[j];
+    const cambioPorcentual = ((precioFinal - precioInicial) / precioInicial) * 100;
+
+    total += (item.ponderacion / 100) * cambioPorcentual;
     suma += item.ponderacion;
   });
 
   document.getElementById("resultadoCosto").innerHTML = `
     Suma Total de Ponderaciones: ${suma.toFixed(2)}%<br>
-    Cambio Global Ponderado: ${total.toFixed(4)}%
+    Cambio Global Ponderado: ${total.toFixed(3)}%
   `;
 }
 </script>
