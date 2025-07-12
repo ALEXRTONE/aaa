@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>IDEX</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f4f6;
+        }
+        .sidebar {
+            width: 200px;
+            background: #e3e3e3;
+            height: 100vh;
+            float: left;
+            padding-top: 20px;
+        }
+        .sidebar button {
+            display: block;
+            width: 180px;
+            margin: 10px auto;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .content {
+            margin-left: 200px;
+            padding: 20px;
+        }
+        header {
+            background-color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header img {
+            height: 40px;
+        }
+        .section {
+            margin-top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="https://via.placeholder.com/120x40?text=IDEX" alt="IDEX Logo">
+    <button onclick="logout()">Cerrar Sesión</button>
+</header>
+
+<div class="sidebar">
+    <button onclick="showSection('historicos')">📊 Datos Históricos</button>
+    <button onclick="showSection('estructura')">📘 Estructura de Costos</button>
+</div>
+
+<div class="content">
+    <div id="historicos" class="section" style="display: none;">
+        <h2>Datos Históricos</h2>
+        <p>Aquí irían las gráficas, filtros y toggles.</p>
+    </div>
+
+    <div id="estructura" class="section">
+        <h2>Estructura de Costos Personalizada</h2>
+        <p>Selecciona los commodities y asigna su ponderación en tu estructura de costos.</p>
+        <div id="inputs"></div>
+        <label for="startDate">Selecciona Fecha Inicial:</label>
+        <select id="startDate"></select>
+        <label for="endDate">Selecciona Fecha Final:</label>
+        <select id="endDate"></select>
+        <br><br>
+        <button onclick="calcularCambio()">Calcular Cambio Total</button>
+        <p id="resultado"></p>
+        <p id="resultadoCambio"></p>
+    </div>
+</div>
+
+<script>
+const commodities = {
+    "Electricidad": { label: "Energía Electrica MEX - Tarifa DAC (MXN/kWh)", data: { "May 2024": 5.048, "Jun 2024": 5.074 } },
+    "Petroleo": { label: "Petroleo Brent (USD/bbl)", data: { "May 2024": 81.995, "Jun 2024": 82.555 } },
+    "Gas": { label: "Gas Natural MEX (MXN)", data: { "May 2024": 3.01, "Jun 2024": 3.02 } },
+    "Palma": { label: "Aceite de Palma (USD/mt)", data: { "May 2024": 950, "Jun 2024": 960 } },
+    "Soya": { label: "Aceite de Soya (USD/mt)", data: { "May 2024": 1050, "Jun 2024": 1060 } },
+    "FleteTrans": { label: "Flete Transatlantic (USD/contenedor)", data: { "May 2024": 2000, "Jun 2024": 2100 } },
+    "FletePac": { label: "Flete Pacific (USD/contenedor)", data: { "May 2024": 2500, "Jun 2024": 2550 } },
+    "Diesel": { label: "Diesel US (USD per Gallon)", data: { "May 2024": 3.8, "Jun 2024": 3.9 } },
+    "TipoCambio": { label: "Tipo de Cambio USD/MXN", data: { "May 2024": 17.2, "Jun 2024": 17.3 } }
+};
+
+function showSection(sectionId) {
+    document.getElementById("historicos").style.display = "none";
+    document.getElementById("estructura").style.display = "none";
+    document.getElementById(sectionId).style.display = "block";
+}
+
+function logout() {
+    alert("Sesión cerrada");
+}
+
+window.onload = function() {
+    const inputsDiv = document.getElementById("inputs");
+    for (let key in commodities) {
+        const label = commodities[key].label;
+        inputsDiv.innerHTML += `<label>${label}: <input type="number" step="0.01" id="peso_${key}" value="0"></label><br>`;
+    }
+
+    const fechas = ["May 2024", "Jun 2024"];
+    const startDate = document.getElementById("startDate");
+    const endDate = document.getElementById("endDate");
+    fechas.forEach(f => {
+        startDate.innerHTML += `<option value="${f}">${f}</option>`;
+        endDate.innerHTML += `<option value="${f}">${f}</option>`;
+    });
+};
+
+function calcularCambio() {
+    const start = document.getElementById("startDate").value;
+    const end = document.getElementById("endDate").value;
+
+    let sumaPonderaciones = 0;
+    let cambioGlobal = 0;
+
+    for (let key in commodities) {
+        const peso = parseFloat(document.getElementById(`peso_${key}`).value) || 0;
+        sumaPonderaciones += peso;
+
+        const inicial = commodities[key].data[start];
+        const final = commodities[key].data[end];
+
+        if (inicial !== undefined && final !== undefined && peso > 0) {
+            const cambio = ((final - inicial) / inicial) * peso;
+            cambioGlobal += cambio;
+        }
+    }
+
+    document.getElementById("resultado").textContent = `Suma Total de Ponderaciones: ${sumaPonderaciones.toFixed(2)}`;
+    document.getElementById("resultadoCambio").textContent = `Cambio Global Ponderado: ${(cambioGlobal * 100).toFixed(4)}%`;
+}
+</script>
+</body>
+</html>
