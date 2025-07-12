@@ -1,0 +1,77 @@
+
+<!-- Este es un fragmento representativo del archivo completo corregido -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <title>IDEX - Datos Históricos</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+<body>
+  <button id="btnLogin" onclick="mostrarLogin()">Iniciar Sesión</button>
+  <button id="btnLogout" onclick="cerrarSesion()" style="display:none;">Cerrar Sesión</button>
+
+  <script>
+    function loginUser() {
+      const user = document.getElementById("loginUser").value;
+      const password = document.getElementById("loginPassword").value;
+
+      if (!user || !password) {
+        alert("Por favor completa todos los campos.");
+        return;
+      }
+
+      firebase.database().ref("users/" + user).get().then((snapshot) => {
+        if (snapshot.exists()) {
+          if (snapshot.val().password === password) {
+            const suscripciónActiva = snapshot.val().suscripción === true;
+            localStorage.setItem("usuarioActual", user);
+            localStorage.setItem("suscripciónActiva", suscripciónActiva);
+
+            alert("Inicio de sesión exitoso");
+
+            document.getElementById('login').style.display = "none";
+            document.getElementById('contenido').style.display = "flex";
+            document.getElementById('header').style.display = "block";
+            document.getElementById('descripcionIDEX').style.display = "none";
+            document.getElementById('landing').style.display = "none";
+
+            document.getElementById('btnLogin').style.display = "none";
+            document.getElementById('btnLogout').style.display = "inline-block";
+
+            document.querySelector('.sidebar-nav').style.display = 'block';
+
+            if (typeof inicializarFiltros === 'function') inicializarFiltros();
+          } else {
+            alert("Contraseña incorrecta");
+          }
+        } else {
+          alert("Usuario no encontrado");
+        }
+      }).catch((error) => {
+        alert("Error al conectar con Firebase: " + error.message);
+      });
+    }
+
+    function cerrarSesion() {
+      document.getElementById("contenido").style.display = "none";
+      document.getElementById("estructuraCostos").style.display = "none";
+      document.getElementById("perfilUsuario").style.display = "none";
+      document.getElementById("landing").style.display = "flex";
+      document.getElementById("descripcionIDEX").style.display = "block";
+      document.getElementById("btnLogin").style.display = "inline-block";
+      document.getElementById("btnLogout").style.display = "none";
+
+      const sidebar = document.querySelector('.sidebar-nav');
+      if (sidebar) sidebar.style.display = 'none';
+
+      localStorage.removeItem("usuarioActual");
+      localStorage.removeItem("suscripciónActiva");
+
+      window.scrollTo(0, 0);
+      alert("Has cerrado sesión exitosamente.");
+    }
+  </script>
+</body>
+</html>
