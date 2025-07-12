@@ -849,7 +849,7 @@ function calcularEstructura() {
     const arr = cambiosMensuales[item.nombre];
     const v1 = arr[i];
     const v2 = arr[j];
-    const cambio = ((v2 - v1) / v1) * 100;
+    const cambio = (v2 - v1) / v1;
     total += item.ponderacion * cambio;
     suma += item.ponderacion;
   });
