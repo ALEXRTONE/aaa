@@ -1,3 +1,4 @@
+
 import { Button, TextInput } from "flowbite-react";
 import logo from '../assets/logo.png';
 import { Link } from "react-router-dom";
@@ -23,19 +24,15 @@ const style = {
   },
 }
 
-const Signup = () => {
+export function LoginForm() {
 
-    return (
-      <div className='login-container'>
-      <div style={style.card} className="max-w-md w-sm">
+  return (
+    <div style={style.card} className="max-w-md w-sm">
       <Link to={'/'}>
         <img className="cursor-pointer" src={logo} alt="idex logo" style={style.img} />
-      </Link> 
-      <h2 style={style.h2} className="text-center text-black pb-8 pt-5">Crear cuenta</h2>
+      </Link>
+      <h2 style={style.h2} className="text-center text-black pb-8 pt-5">Iniciar sesión</h2>
       <form className="flex max-w-md flex-col gap-4" >
-        <div>
-          <TextInput style={style.input} id="username" type="text" placeholder="Usuario" required />
-        </div>
         <div>
           <TextInput style={style.input} id="email1" type="email" placeholder="Name@example.com" required />
         </div>
@@ -43,15 +40,12 @@ const Signup = () => {
           <TextInput style={style.input} id="password1" type="password" placeholder="Contraseña" required />
         </div>
         <div className="flex flex-wrap justify-around">
-          <Link to={'/login'}>
-            <Button size="xl" className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:bg-gradient-to-bl focus:ring-cyan-300 dark:focus:ring-cyan-800" type='button'> ← Regresar</Button>
+          <Button size="xl" className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:bg-gradient-to-bl focus:ring-cyan-300 dark:focus:ring-cyan-800" type="submit">Entrar</Button>
+          <Link to={'/signup'}>
+            <Button size="xl" className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:bg-gradient-to-bl focus:ring-cyan-300 dark:focus:ring-cyan-800" type='button'>Crear cuenta</Button>
           </Link>
-          <Button size="xl" className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:bg-gradient-to-bl focus:ring-cyan-300 dark:focus:ring-cyan-800" type="submit">Continuar</Button>
         </div>
       </form>
     </div>
-    </div>
-    )
+  );
 }
-
-export default Signup

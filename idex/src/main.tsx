@@ -4,11 +4,13 @@ import './index.css';
 
 import App from './App.tsx';
 
-import ErrorPage from './pages/ErrorPage.tsx';
-import Home from './pages/Home.tsx';
-import Login from './pages/Login.tsx';
-import UserProfile from './pages/UserProfile.tsx';
-import Signup from './pages/Signup.tsx';
+import ErrorPage from './pages/ErrorPage';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import UserProfile from './pages/UserProfile';
+import Signup from './pages/Signup';
+import Costos from './pages/Costos'
+import LandingPage from './pages/LandingPage'
 
 const router = createBrowserRouter([
   {
@@ -18,7 +20,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
+        element: <LandingPage />,
       }, 
       {
         path: '/login',
@@ -29,9 +31,17 @@ const router = createBrowserRouter([
         element: <Signup />
       }, 
       {
-        path: '/userprofile',
+        path: '/perfil',
         element: <UserProfile />
-      }, 
+      },
+      {
+        path: '/costos',
+        element: <Costos />
+      },
+      {
+        path: '/home',
+        element: <Home />
+      }
     ]
   }
 ])
