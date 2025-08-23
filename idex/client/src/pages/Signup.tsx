@@ -1,6 +1,9 @@
 import { Button, TextInput } from "flowbite-react";
 import logo from '../assets/logo.png';
 import { Link } from "react-router-dom";
+import { useState, type ChangeEvent, type FormEvent } from "react";
+import { type UserSignup } from "../interfaces/Users.js";
+import { apiSignup } from '../api/apiSignup.js';
 
 const style = {
   card: {
@@ -14,6 +17,7 @@ const style = {
     },
   input: {
     background: 'white',
+    color: 'black',
     border: '1px solid rgb(204, 204, 204)',
     fontWeight: 'bold'
   },
@@ -25,6 +29,30 @@ const style = {
 
 const Signup = () => {
 
+  const [signupData, setSignup] = useState<UserSignup>({
+    username: '',
+    password: '',
+    email: ''
+  })
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSignup({
+      ...signupData,
+      [name]: value
+    });
+  }
+
+  const handleSignup = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      await apiSignup(signupData);
+      window.location.assign('/login')
+    } catch (error: any) {
+      console.error('Failed to Signup', error);
+    }
+  }
+
     return (
       <div className='login-container'>
       <div style={style.card} className="max-w-md w-sm">
@@ -32,15 +60,15 @@ const Signup = () => {
         <img className="cursor-pointer" src={logo} alt="idex logo" style={style.img} />
       </Link> 
       <h2 style={style.h2} className="text-center text-black pb-8 pt-5">Crear cuenta</h2>
-      <form className="flex max-w-md flex-col gap-4" >
+      <form onSubmit={handleSignup} className="flex max-w-md flex-col gap-4" >
         <div>
-          <TextInput style={style.input} id="username" type="text" placeholder="Usuario" required />
+          <TextInput onChange={handleChange} name="username" style={style.input} id="username" type="text" placeholder="Usuario" required />
         </div>
         <div>
-          <TextInput style={style.input} id="email1" type="email" placeholder="Name@example.com" required />
+          <TextInput onChange={handleChange} name="email" style={style.input} id="email" type="email" placeholder="Name@example.com" required />
         </div>
         <div>
-          <TextInput style={style.input} id="password1" type="password" placeholder="Contraseña" required />
+          <TextInput onChange={handleChange} name="password" style={style.input} id="password" type="password" placeholder="Contraseña" required />
         </div>
         <div className="flex flex-wrap justify-around">
           <Link to={'/login'}>

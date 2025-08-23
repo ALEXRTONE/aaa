@@ -6,6 +6,7 @@ const LeftNavbar = () => {
     const loc = useLocation()
 
     return (
+        <div>
         <div className="sidebar-nav">
             <Link to={'/perfil'}>
             <button style={loc.pathname == '/perfil' ? {background: '#0071e3', color: 'white'} : {}}>👤 Perfil de usuario</button>
@@ -16,6 +17,7 @@ const LeftNavbar = () => {
             <Link to={'/costos'}>
             <button style={loc.pathname == '/costos' ? {background: '#0071e3', color: 'white'} : {}}>📈 Estructura de Costos</button>
             </Link>
+        </div>
         </div>
 
     )

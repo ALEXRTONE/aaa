@@ -2,7 +2,9 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
 
-import App from './App.tsx';
+import ProtectedRoute from './utils/ProtectedRoutes';
+import AuthProvider from './utils/AuthProvider';
+import auth from './utils/auth.js'
 
 import ErrorPage from './pages/ErrorPage';
 import Home from './pages/Home';
@@ -14,13 +16,11 @@ import LandingPage from './pages/LandingPage'
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <App />,
     errorElement: <ErrorPage />,
     children: [
       {
-        index: true,
-        element: <LandingPage />,
+        path: '/',
+        element: auth.loggedIn() ? <Home /> : <LandingPage />,
       }, 
       {
         path: '/login',
@@ -32,15 +32,27 @@ const router = createBrowserRouter([
       }, 
       {
         path: '/perfil',
-        element: <UserProfile />
+        element: (
+          <ProtectedRoute>
+            <UserProfile />
+          </ProtectedRoute>
+        )
       },
       {
         path: '/costos',
-        element: <Costos />
+        element: (
+          <ProtectedRoute>
+            <Costos />
+          </ProtectedRoute>
+        ) 
       },
       {
         path: '/home',
-        element: <Home />
+        element: (
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        )
       }
     ]
   }
@@ -48,5 +60,11 @@ const router = createBrowserRouter([
 
 const rootElement = document.getElementById('root');
 if (rootElement) {
-  ReactDOM.createRoot(rootElement).render(<RouterProvider router={router} />);
+  ReactDOM.createRoot(rootElement).render(
+    <div style={{ height: "100vh" }}>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </div>
+  );
 }

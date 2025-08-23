@@ -7,6 +7,8 @@ const style = {
         height: '100%',
         padding: '40px',
         background: 'rgb(237, 237, 237)',
+        marginLeft: '222px',
+
     },
 }
 

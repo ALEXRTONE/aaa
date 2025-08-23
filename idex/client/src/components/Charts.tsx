@@ -1,30 +1,55 @@
+import type { BienesData } from "../interfaces/Commodities";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
 
-const Charts = () => {
-    const ctx = document.getElementById('myChart');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                borderWidth: 1
-            }]
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const Charts = (props: BienesData) => {
+    const options = {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top' as const,
         },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
+        title: {
+          display: true,
+        },
+      },
+    };
+
+    const data = {
+            labels: props.meses,
+            datasets: [
+                {
+                    label: props.name,
+                    data: props.precio,
+                    borderColor: 'blue',
+                },
+            ],
         }
-    })
-    
+
     return (
-    <div>
-        <canvas id="myChart"></canvas>
-    </div>
-    )
+        <>
+            <Line options={options} data={data} />
+        </>
+    );
 }
 
 export default Charts

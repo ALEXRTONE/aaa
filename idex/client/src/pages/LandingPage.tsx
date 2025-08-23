@@ -21,7 +21,6 @@ const style = {
         boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
         padding: '30px',
         width: '300px',
-        textAlign: 'center',
     },
     landing4: {
         backgroundColor: 'white',
@@ -29,7 +28,6 @@ const style = {
         boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
         padding: '30px',
         width: '300px', 
-        textAlign: 'center'
     }
 }
 
@@ -44,10 +42,10 @@ const LandingPage = () => {
             <div>
                 <div className="landing" id="landing" style={style.landing}>
                 <div className='flex flex-wrap gap-40' style={style.landing2}>
-                    <div style={style.landing3}>
+                    <div className='text-center' style={style.landing3}>
                     <h2>Plan Gratuito</h2>
                     <p style={{fontSize: '14px', color: '#555'}}>Accede a:</p>
-                    <ul style={{textAlign: 'left', paddingLeft: '20px', fontSize: '14px'}}>
+                    <ul style={{ paddingLeft: '20px', fontSize: '14px'}}>
                         <li>6 meses de datos históricos</li>
                         <li>Filtros básicos por commodity</li>
                         <li>Acceso limitado a gráficas</li>
@@ -55,7 +53,7 @@ const LandingPage = () => {
                     <p style={{fontSize: '18px', fontWeight: 'bold'}}>$0 MXN</p>
                     <button>Iniciar Sesión</button>
                     </div>
-                    <div style={style.landing4}>
+                    <div className='text-center' style={style.landing4}>
                     <h2>Plan Pro</h2>
                     <p style={{fontSize: '14px', color: '#555'}}>Incluye todo el contenido del plan gratuito más:</p>
                     <ul style={{textAlign: 'left', paddingLeft: '20px', fontSize: '14px'}}>
