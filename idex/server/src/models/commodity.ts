@@ -4,7 +4,9 @@ interface CommodityAttributes {
     ID: number;
     FECHA: Date
     PRODUCTO: string;
-    PRECIO: number
+    PRECIO: number;
+    SECTOR_ID: number;
+
 }
 
 interface CommodityCreationAttributes extends Optional<CommodityAttributes, 'ID'> {}
@@ -14,9 +16,7 @@ export class Commodity extends Model<CommodityAttributes, CommodityCreationAttri
     FECHA!: Date;
     PRODUCTO!: string;
     PRECIO!: number;
-
-    readonly createdAt!: Date;
-    readonly updatedAt!: Date;
+    SECTOR_ID!: number;
 }
 
 export function CommodityFactory (sequelize: Sequelize): typeof Commodity {
@@ -36,6 +36,10 @@ export function CommodityFactory (sequelize: Sequelize): typeof Commodity {
                 allowNull: false
             },
             PRECIO: {
+                type: DataTypes.INTEGER,
+                allowNull: false
+            },
+            SECTOR_ID: {
                 type: DataTypes.INTEGER,
                 allowNull: false
             },

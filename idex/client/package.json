@@ -11,6 +11,8 @@
     "postinstall": "flowbite-react patch"
   },
   "dependencies": {
+    "@stripe/react-stripe-js": "^4.0.0",
+    "@stripe/stripe-js": "^7.9.0",
     "@tailwindcss/vite": "^4.1.4",
     "axios": "^1.11.0",
     "chart.js": "^4.5.0",

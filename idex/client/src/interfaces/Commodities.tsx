@@ -17,4 +17,15 @@ export interface Producto {
     FECHA: string
     PRODUCTO: string
     PRECIO: number
+    SECTOR_ID: number
+}
+
+export interface Sector {
+    ID: number
+    SECTOR: string
+}
+
+export interface SectorInterface {
+  name: string
+  commodity: string[]
 }

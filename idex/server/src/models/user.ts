@@ -7,6 +7,7 @@ interface UserAttributes {
   username: string;
   email: string;
   password: string;
+  membresia?: string;
 }
 
 // Define the optional attributes for creating a new User
@@ -18,6 +19,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public username!: string;
   public email!: string;
   public password!: string;
+  public membresia!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -54,6 +56,11 @@ export function UserFactory(sequelize: Sequelize): typeof User {
       password: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      membresia: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'gratis'
       },
     },
     {

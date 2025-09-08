@@ -3,3 +3,10 @@ export interface UserSignup {
     password: string
     email: string
 }
+
+export interface User {
+    id: number
+    username: string
+    email: string
+    membresia: string
+}

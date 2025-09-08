@@ -33,6 +33,23 @@ router.get('/:id', async (req: Request, res: Response) => {
   }
 });
 
+// GET /users/name/:username - Get a user by username
+router.get('/name/:username', async (req: Request, res: Response) => {
+  try {
+    const user = await User.findOne({
+      where: { username: req.params.username },
+      attributes: { exclude: ['password', 'createdAt', 'updatedAt'] }
+    });
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ message: 'User not found' });
+    }
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // POST /users - Create a new user
 router.post('/', async (req: Request, res: Response) => {
   const { username, email, password } = req.body;

@@ -49,6 +49,7 @@ export function LoginForm() {
       const res = await login(loginData)
       if (res.token) {
         localStorage.setItem('loggedin',`${auth.loggedIn()}`)
+        localStorage.setItem('user',`${loginData.username}`)
         auth.saveLogin(res.token)
       }
     } catch (error) {

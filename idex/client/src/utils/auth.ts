@@ -44,6 +44,7 @@ class AuthService {
   logout() {
     // TODO: remove the token from localStorage
     localStorage.removeItem('validJWT');
+    localStorage.removeItem('user');
     // TODO: redirect to the login page
     window.location.assign('/');
   }

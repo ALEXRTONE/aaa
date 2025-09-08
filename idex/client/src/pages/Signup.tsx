@@ -1,34 +1,42 @@
-import { Button, TextInput } from "flowbite-react";
+import { Button, TextInput, HelperText } from "flowbite-react";
 import logo from '../assets/logo.png';
 import { Link } from "react-router-dom";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { type UserSignup } from "../interfaces/Users.js";
 import { apiSignup } from '../api/apiSignup.js';
 
-const style = {
-  card: {
-    padding: '2%',
-    boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px',
-    borderRadius: '20px',
-    background: 'white'
-  },
-  img: {
-        padding: '10%'
-    },
-  input: {
-    background: 'white',
-    color: 'black',
-    border: '1px solid rgb(204, 204, 204)',
-    fontWeight: 'bold'
-  },
-  h2: {
-    fontWeight: 'bold',
-    fontSize: '18pt'
-  },
-}
 
 const Signup = () => {
+  const [userValidation, setUserValidation] = useState<boolean>(true)
 
+  const style = {
+    card: {
+      padding: '2%',
+      boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px',
+      borderRadius: '20px',
+      background: 'white'
+    },
+    img: {
+          padding: '10%'
+      },
+    input: {
+      background: 'white',
+      color: 'black',
+      border: `1px solid rgb(204, 204, 204)`,
+      fontWeight: 'bold'
+    },
+    inputInvalid: {
+      background: 'white',
+      color: 'black',
+      border: `1px solid red`,
+      fontWeight: 'bold',
+    },
+    h2: {
+      fontWeight: 'bold',
+      fontSize: '18pt'
+    },
+  }
+  
   const [signupData, setSignup] = useState<UserSignup>({
     username: '',
     password: '',
@@ -46,8 +54,16 @@ const Signup = () => {
   const handleSignup = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await apiSignup(signupData);
-      window.location.assign('/login')
+      console.log(signupData);
+      
+      const user = await apiSignup(signupData);
+      
+      if (!user) {
+        setUserValidation(false)
+      } else {
+        window.location.assign('/login')
+      }
+
     } catch (error: any) {
       console.error('Failed to Signup', error);
     }
@@ -61,8 +77,9 @@ const Signup = () => {
       </Link> 
       <h2 style={style.h2} className="text-center text-black pb-8 pt-5">Crear cuenta</h2>
       <form onSubmit={handleSignup} className="flex max-w-md flex-col gap-4" >
+        <HelperText className={ userValidation ? 'hidden' : 'block' } ><span className="font-medium text-red-500 font-bold">Usuario o correo inválido</span></HelperText>
         <div>
-          <TextInput onChange={handleChange} name="username" style={style.input} id="username" type="text" placeholder="Usuario" required />
+          <TextInput onChange={handleChange} name="username" style={userValidation ? style.input : style.inputInvalid} id="username" type="text" placeholder="Usuario" required />
         </div>
         <div>
           <TextInput onChange={handleChange} name="email" style={style.input} id="email" type="email" placeholder="Name@example.com" required />

@@ -29,7 +29,7 @@ const Header = () => {
         <Navbar style={style.navdiv} className="flex">
             {/* ml-20 mr-140 */}
         <NavbarBrand className="flex flex-wrap ">
-            <img src={logo} className="mr-3 h-6 sm:h-9" alt="Logo idex" />
+            <Link to={'/'}> <img src={logo} className="mr-3 h-6 sm:h-9 hover:shadow" alt="Logo idex" /> </Link>
             <h1 className="pt-1 self-center text-xl font-semibold text-dark">Datos que se transforman en poder</h1>
         </NavbarBrand>
 
@@ -39,7 +39,7 @@ const Header = () => {
             </Link>
         ) : (
             <Link to='/login'>
-                <Button outline color='blue'>Iniciar sesión</Button>
+                <Button outline className="hover:bg-blue-500" color='blue'>Iniciar sesión</Button>
             </Link>
         )}
 

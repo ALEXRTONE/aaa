@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.use('/api', authenticateToken, apiRoutes);
 router.use('/auth', authRoutes);
-router.use('/signuser', signupRoutes);
+router.use('/signup-api', signupRoutes);
 
 
 export default router;
