@@ -1,6 +1,6 @@
 import LeftNavbar from "../components/LeftNavbar"
 import Header from '../components/Header';
-import { Datepicker, Card } from "flowbite-react";
+import { Card } from "flowbite-react";
 import { useState, useEffect, type ChangeEvent } from "react";
 import { apiProductos, apiCostos, apiMeses } from "../api/apiCommodities.js";
 
@@ -32,7 +32,7 @@ interface FechasInput {
   fechaFinal: string
 }
 
-const UserProfile = () => {
+const Costos = () => {
   const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
   // const [costoPonderado, setCostoPonderado] = useState(0);
   const [fechas, setFechas] = useState<FechasInput>({fechaInicial:'', fechaFinal: ''})
@@ -177,4 +177,4 @@ const UserProfile = () => {
 )
 }
 
-export default UserProfile
+export default Costos

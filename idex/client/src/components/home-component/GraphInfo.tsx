@@ -159,5 +159,3 @@ const GraphInfo = () => {
 }
 
 export default GraphInfo
-
-//const search = () => <> <input id="buscadorCommodity" onkeyup="filtrarCommodities()" style="margin-bottom:10px; width:100%; padding:8px; border-radius:8px; border:1px solid #ccc;" type="text"/> </>

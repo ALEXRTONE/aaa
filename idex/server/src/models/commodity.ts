@@ -4,7 +4,7 @@ interface CommodityAttributes {
     ID: number;
     FECHA: Date
     PRODUCTO: string;
-    PRECIO: number;
+    PRECIO?: number;
     SECTOR_ID: number;
 
 }
@@ -36,8 +36,8 @@ export function CommodityFactory (sequelize: Sequelize): typeof Commodity {
                 allowNull: false
             },
             PRECIO: {
-                type: DataTypes.INTEGER,
-                allowNull: false
+                type: DataTypes.DECIMAL(10,3),
+                allowNull: true
             },
             SECTOR_ID: {
                 type: DataTypes.INTEGER,

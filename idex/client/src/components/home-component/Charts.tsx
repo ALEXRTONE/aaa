@@ -1,4 +1,4 @@
-import type { BienesData } from "../interfaces/Commodities";
+import type { BienesData } from "../../interfaces/Commodities";
 import {
   Chart as ChartJS,
   CategoryScale,
