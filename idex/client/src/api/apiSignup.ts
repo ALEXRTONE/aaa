@@ -9,7 +9,7 @@ interface Sign {
 
 export const apiSignup = async (signup: UserSignup): Promise<Sign | undefined>  => {
     try {
-      const host = "signup-api/users";
+      const host = "https://idex-backend-5udh.onrender.com/signup-api/users";
       const response = await axios.post(host, {
           username: signup.username,
           password: signup.password,

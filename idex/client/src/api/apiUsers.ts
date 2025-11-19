@@ -5,7 +5,7 @@ import auth from '../utils/auth';
 
 export const apiUser = async (username:string): Promise< User | undefined > => {
     try {
-        const host = `api/users/name/${username}`;
+        const host = `https://idex-backend-5udh.onrender.com/api/users/name/${username}`;
         const res = await axios.get(host, {
             headers: {
                 Authorization: `Bearer ${auth.getToken()}`}

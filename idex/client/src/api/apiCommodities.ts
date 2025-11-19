@@ -8,7 +8,7 @@ export const apiCostos = async (startDate: Date): Promise<Producto[]> => {
         const dateInit = new Date(startDate.getFullYear(),startDate.getMonth(), 1)
         const dateEnd = new Date(startDate.getFullYear(),startDate.getMonth()+1, 0)        
 
-        const host = 'api/commodities/date'
+        const host = 'https://idex-backend-5udh.onrender.com/api/commodities/date'
         const res = await axios.post(host, {
             startDate: dateInit.toISOString(),
             endDate: dateEnd.toISOString()
@@ -32,7 +32,7 @@ export const apiCostos = async (startDate: Date): Promise<Producto[]> => {
 
 export const apiProductos = async (): Promise< string[] | undefined > => {
     try {
-        const host = 'api/commodities/products';
+        const host = 'https://idex-backend-5udh.onrender.com/api/commodities/products';
         const res = await axios.get(host, {
             headers: {
                 Authorization: `Bearer ${auth.getToken()}`}
@@ -51,7 +51,7 @@ export const apiProductos = async (): Promise< string[] | undefined > => {
 
 export const apiMeses = async (): Promise<string[] | undefined> => {
     try {
-        const host = 'api/commodities/meses';
+        const host = 'https://idex-backend-5udh.onrender.com/api/commodities/meses';
         const res = await axios.get(host, {
             headers: {
                 Authorization: `Bearer ${auth.getToken()}`}
@@ -70,7 +70,7 @@ export const apiMeses = async (): Promise<string[] | undefined> => {
 
 export const apiCommodities = async (): Promise< Producto[] | undefined > => {
     try {
-        const host = 'api/commodities';
+        const host = 'https://idex-backend-5udh.onrender.com/api/commodities';
         const res = await axios.get(host, {
             headers: {
                 Authorization: `Bearer ${auth.getToken()}`}
