@@ -7,7 +7,7 @@ interface LogInfo {
 
 export const login = async (login: LogInfo) => {
     try {
-      const host = "auth/login";
+      const host = "https://idex-backend-5udh.onrender.com/auth/login";
       const response = await axios.post(host, {
           username: login.username,
           password: login.password,

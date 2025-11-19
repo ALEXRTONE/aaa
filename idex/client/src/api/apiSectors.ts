@@ -5,7 +5,7 @@ import type {  Sector } from '../interfaces/Commodities'
 
 export const apiSectors = async (): Promise< Sector[] | undefined > => {
     try {
-        const host = 'api/sectors';
+        const host = 'https://idex-backend-5udh.onrender.com/api/sectors';
         const res = await axios.get(host, {
             headers: {
                 Authorization: `Bearer ${auth.getToken()}`}
