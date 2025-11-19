@@ -11,7 +11,6 @@ const PORT = process.env.PORT || 3001;
 
 app.use(cors({
   origin: 'https://idex-backend-8rw0.onrender.com',
-  credentials: true
 }));
 
 app.use(express.json());
