@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from 'cors'
 // Import the connection object
 import sequelize from './config/connection.js';
 import routes from './routes/index.js'
