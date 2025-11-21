@@ -1,6 +1,6 @@
 import express from 'express';
 // import cors from 'cors'
-// Import the connection object
+import cors from 'cors'
 import sequelize from './config/connection.js';
 import routes from './routes/index.js'
 
@@ -9,14 +9,15 @@ const PORT = process.env.PORT || 3001;
 
 app.use(express.static('../../client/dist'));
 
+app.use(cors({
+  origin: ['https://idex-backend-8rw0.onrender.com', 
+          'https://idex-backend-5udh.onrender.com'],
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(routes);
 
-// app.use(cors({
-//   origin: 'https://idex-backend-8rw0.onrender.com',
-// }));
 
 
 // Connect to the database before starting the Express.js server
