@@ -4,7 +4,7 @@ import './index.css';
 
 import ProtectedRoute from './utils/ProtectedRoutes';
 import AuthProvider from './utils/AuthProvider';
-//import auth from './utils/auth.js'
+import auth from './utils/auth.js'
 
 import ErrorPage from './pages/ErrorPage';
 import Home from './pages/Home';
@@ -20,8 +20,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        //element: auth.loggedIn() ? <Home /> : <LandingPage />,
-        element: <LandingPage />,
+        element: auth.loggedIn() ? <Home /> : <LandingPage />,
       }, 
       {
         path: '/login',
@@ -50,9 +49,9 @@ const router = createBrowserRouter([
       {
         path: '/home',
         element: (
-          <ProtectedRoute>
+
             <Home />
-          </ProtectedRoute>
+
         )
       }
     ]
