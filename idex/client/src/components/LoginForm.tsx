@@ -1,7 +1,7 @@
 
 import { Button, TextInput } from "flowbite-react";
 import logo from '../assets/logo.png';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, replace, useNavigate } from "react-router-dom";
 import { useState, type FormEvent, type ChangeEvent } from "react";
 import { login } from "../api/login.js";
 import auth from '../utils/auth.js'
@@ -53,7 +53,7 @@ export function LoginForm() {
         auth.saveLogin(res.token)
         localStorage.setItem('loggedin',`${auth.loggedIn()}`)
 
-        navigate("/home")
+        navigate("/home", {replace: true})
       }
     } catch (error) {
       console.error('Failed to login', error)
