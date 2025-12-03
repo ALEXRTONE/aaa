@@ -1,5 +1,6 @@
 import { type JwtPayload, jwtDecode } from 'jwt-decode';
 
+
 class AuthService {
   getProfile() {
     // TODO: comment the functionality of the next line
@@ -38,15 +39,16 @@ class AuthService {
     // TODO: set the token to localStorage
     localStorage.setItem('validJWT',idToken);
     // TODO: redirect to the home page
-    window.location.assign('/home');
+
   }
 
   logout() {
     // TODO: remove the token from localStorage
     localStorage.removeItem('validJWT');
     localStorage.removeItem('user');
+    localStorage.removeItem('loggedin');
     // TODO: redirect to the login page
-    window.location.assign('/');
+
   }
 }
 

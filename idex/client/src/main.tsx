@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import './index.css';
 
 import ProtectedRoute from './utils/ProtectedRoutes';
@@ -20,7 +20,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: auth.loggedIn() ? <Home /> : <LandingPage />,
+        element: <LandingPage />,
       }, 
       {
         path: '/login',
@@ -34,7 +34,7 @@ const router = createBrowserRouter([
         path: '/perfil',
         element: (
           <ProtectedRoute>
-            <UserProfile />
+            { auth.loggedIn() ? <UserProfile /> : <Navigate to='/login' replace/> }
           </ProtectedRoute>
         )
       },
@@ -42,7 +42,7 @@ const router = createBrowserRouter([
         path: '/costos',
         element: (
           <ProtectedRoute>
-            <Costos />
+            { auth.loggedIn() ? <Costos /> : <Navigate to='/login' replace/> }
           </ProtectedRoute>
         ) 
       },
@@ -50,7 +50,7 @@ const router = createBrowserRouter([
         path: '/home',
         element: (
           <ProtectedRoute>
-            <Home />
+            { auth.loggedIn() ? <Home /> : <Navigate to='/login' replace/> }
           </ProtectedRoute>
 
         )

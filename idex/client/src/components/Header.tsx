@@ -1,5 +1,5 @@
 import { Button, Navbar, NavbarBrand } from "flowbite-react";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import logo from '../assets/logo.png';
 import { useLocation } from "react-router-dom"
 import auth from '../utils/auth.js'
@@ -18,10 +18,12 @@ const style = {
 }
 
 const Header = () => {
-    const loc = useLocation()
+    const loc = useLocation();
+    const navigate = useNavigate();
 
     const handleLogOut = () => {
-        auth.logout()
+        auth.logout();
+        navigate("/", {replace: true});
     }
 
     return (
