@@ -2,7 +2,7 @@
 import { Button, TextInput } from "flowbite-react";
 import logo from '../assets/logo.png';
 import { Link, useNavigate } from "react-router-dom";
-import { useState, type FormEvent, type ChangeEvent } from "react";
+import { useState, type FormEvent, type ChangeEvent, useEffect } from "react";
 import { login } from "../api/login.js";
 import auth from '../utils/auth.js'
 
@@ -28,13 +28,25 @@ const style = {
   },
 }
 
+
 export function LoginForm() {
   const navigate = useNavigate();
-
   const [loginData, setLoginData] = useState({
     username: '',
     password: ''
   });
+  const [resToken, setResToken] = useState(false);
+
+  useEffect(() => { 
+    console.log('usado');
+    if (resToken) {
+      setTimeout(() => {
+    console.log("Esto se ejecuta después de 2 segundos.");
+}, 2000);
+      navigate("/home", {replace: true});
+      console.log('usado2');
+    }
+  }, [resToken])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -45,18 +57,18 @@ export function LoginForm() {
   };
 
   const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       const res = await login(loginData)
       if (res.token) {
-        localStorage.setItem('user',`${loginData.username}`)
-        auth.saveLogin(res.token)
-        localStorage.setItem('loggedin',`${auth.loggedIn()}`)
-
-        navigate("/home", {replace: true})
+        localStorage.setItem('user',`${loginData.username}`);
+        auth.saveLogin(res.token);
+        localStorage.setItem('loggedin',`${auth.loggedIn()}`);
+        setResToken(!!res.token);
+        navigate('/home')
       }
     } catch (error) {
-      console.error('Failed to login', error)
+      console.error('Failed to login', error);
     }
   }
 
