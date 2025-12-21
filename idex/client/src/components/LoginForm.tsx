@@ -1,10 +1,12 @@
 
 import { Button, TextInput } from "flowbite-react";
 import logo from '../assets/logo.png';
-import { Link, useNavigate } from "react-router-dom";
-import { useState, type FormEvent, type ChangeEvent, useEffect } from "react";
+import { Link, Navigate } from "react-router-dom";
+import { useState, type FormEvent, type ChangeEvent } from "react";
 import { login } from "../api/login.js";
 import auth from '../utils/auth.js'
+import { useAuth } from '../utils/AuthProvider.js';
+
 
 const style = {
   card: {
@@ -30,23 +32,24 @@ const style = {
 
 
 export function LoginForm() {
-  const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     username: '',
     password: ''
   });
-  const [resToken, setResToken] = useState(false);
+  const [_resToken, setResToken] = useState(false);
 
-  useEffect(() => { 
-    console.log('usado');
-    if (resToken) {
-      setTimeout(() => {
-    console.log("Esto se ejecuta después de 2 segundos.");
-}, 2000);
-      navigate("/home", {replace: true});
-      console.log('usado2');
-    }
-  }, [resToken])
+  const { setIsAuth } = useAuth();
+
+//   useEffect(() => { 
+//     console.log('usado');
+//     if (resToken) {
+//       setTimeout(() => {
+//     console.log("Esto se ejecuta después de 2 segundos.");
+// }, 2000);
+//       navigate("/home", {replace: true});
+//       console.log('usado2');
+//     }
+//   }, [resToken])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -60,18 +63,30 @@ export function LoginForm() {
     e.preventDefault();
     try {
       const res = await login(loginData)
+
       if (res.token) {
+        setIsAuth(true)
         localStorage.setItem('user',`${loginData.username}`);
+
         auth.saveLogin(res.token);
+        console.log('saveLogin 1: ', auth.loggedIn());
+        
+         setTimeout(() => {}, 2000);
+
         localStorage.setItem('loggedin',`${auth.loggedIn()}`);
         setResToken(!!res.token);
-        navigate('/home')
+
+        console.log('es login 2: ', auth.loggedIn());
+        console.log('el token es: ', auth.getToken())
+
+        return <Navigate to="/home" replace />;
+        
       }
     } catch (error) {
       console.error('Failed to login', error);
     }
   }
-
+console.log('useauthlogin: ', useAuth());
   return (
     <div style={style.card} className="max-w-md w-sm">
       <Link to={'/'}>
