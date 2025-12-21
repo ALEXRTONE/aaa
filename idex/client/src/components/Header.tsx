@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom"
 import logo from '../assets/logo.png';
 import { useLocation } from "react-router-dom"
 import auth from '../utils/auth.js'
+import { useAuth } from "../utils/AuthProvider";
+
 
 const style = {
     hdr: {
@@ -20,10 +22,13 @@ const style = {
 const Header = () => {
     const loc = useLocation();
     const navigate = useNavigate();
+    const { isAuth, setIsAuth } = useAuth();
+    
 
     const handleLogOut = () => {
         auth.logout();
         navigate("/", {replace: true});
+        setIsAuth(false);
     }
 
     return (
@@ -35,7 +40,7 @@ const Header = () => {
             <h1 className="pt-1 self-center text-xl font-semibold text-dark">Datos que se transforman en poder</h1>
         </NavbarBrand>
 
-        { (loc.pathname === '/home' || loc.pathname === '/costos' || loc.pathname === '/perfil' || auth.loggedIn()) ? (
+        { (loc.pathname === '/home' || loc.pathname === '/costos' || loc.pathname === '/perfil' && isAuth) ? (
             <Link to='/'>
                 <Button outline color='red' onClick={handleLogOut}>Cerrar sesión</Button>
             </Link>

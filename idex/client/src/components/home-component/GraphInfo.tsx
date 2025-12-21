@@ -5,8 +5,12 @@ import SectorFilter from './SectorFilter';
 import { apiCommodities, apiMeses, apiProductos } from "../../api/apiCommodities";
 import { apiSectors } from '../../api/apiSectors'
 import type { Producto, Sector, SectorInterface } from "../../interfaces/Commodities";
+import { useAuth } from '../../utils/AuthProvider.js';
+
 
 const GraphInfo = () => {
+
+  console.log('useauth en home: ', useAuth());
 /******************************** Constants ********************************/
   const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 
