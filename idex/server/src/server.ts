@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3001;
 app.use(express.static('../../client/dist'));
 
 app.use(cors({
-  origin: ['http://localhost:5173'],//, 'https://idex-backend-8rw0.onrender.com'],
+  origin: ['http://localhost:5173', 'https://idex-backend-8rw0.onrender.com'],
   credentials: true
 }));
 
