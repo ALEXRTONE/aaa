@@ -72,14 +72,15 @@ const Costos = () => {
     setFechas({
       ...fechas,
       [name]: value
-    });    
+    });
+    console.log('fecha name: ', e.target.name, ' fecha valor: ', e.target.value)
   }
 
   const handleSubmitForm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { fechaInicial, fechaFinal } = fechas;    
-    const fi = new Date(fechaInicial+'T00:00:00')
-    const ff = new Date(fechaFinal+'T00:00:00')
+    const fi = new Date(fechaInicial)
+    const ff = new Date(fechaFinal)
     
     const initialMonth = await apiCostos(fi);
     const endMonth = await apiCostos(ff);

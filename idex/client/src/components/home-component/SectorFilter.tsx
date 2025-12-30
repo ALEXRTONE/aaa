@@ -10,7 +10,6 @@ interface SectorProps {
 }
 
 function SectorFilter({ name, search, products, commodities, handleSelectProductos = ()=>{}}: SectorProps) {
-  console.log(search);
 
   
   const [visible, setVisible] = useState<string>('none')

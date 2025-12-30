@@ -5,12 +5,10 @@ import SectorFilter from './SectorFilter';
 import { apiCommodities, apiMeses, apiProductos } from "../../api/apiCommodities";
 import { apiSectors } from '../../api/apiSectors'
 import type { Producto, Sector, SectorInterface } from "../../interfaces/Commodities";
-import { useAuth } from '../../utils/AuthProvider.js';
 
 
 const GraphInfo = () => {
 
-  console.log('useauth en home: ', useAuth());
 /******************************** Constants ********************************/
   const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 
@@ -144,7 +142,22 @@ const GraphInfo = () => {
       </div>
 
       <div id="charts" className='p-5 rounded-sm border-solid'>
-        {productos.filter( el => selectedProductos.includes(el)).map( (producto, index) => <Charts key={index} name={producto} meses={ precios.filter( el => el.PRODUCTO == producto).map( el => `${monthNames[parseInt(el.FECHA.slice(5,7))-1]} ${el.FECHA.slice(0,4)}` ) } precio={ precios.filter( el => el.PRODUCTO == producto ).map( el => el.PRECIO ) } />) }
+        {
+          productos.filter( el => selectedProductos.includes(el)).map( (producto, index) => <Charts key={index} name={producto} 
+          meses={ 
+            precios
+            .filter( el => el.PRODUCTO == producto)
+            .sort((a, b) => new Date(a.FECHA).getTime() - new Date(b.FECHA).getTime())
+            .map( el => `${monthNames[parseInt(el.FECHA.slice(5,7))-1]} ${el.FECHA.slice(0,4)}` )
+          } 
+            
+          precio={
+            precios
+            .filter( el => el.PRODUCTO == producto )
+            .sort((a, b) => new Date(a.FECHA).getTime() - new Date(b.FECHA).getTime())
+            .map( el => el.PRECIO ) 
+          } 
+        />)}
       </div>
     </div>
 
