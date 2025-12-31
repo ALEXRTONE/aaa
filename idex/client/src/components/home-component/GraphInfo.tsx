@@ -11,6 +11,8 @@ const GraphInfo = () => {
 
 /******************************** Constants ********************************/
   const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+  const userMembresia = localStorage.getItem('membresia')?.toLowerCase();
+
 
   const [sectores, setSectores] = useState<Sector[]>([]);
 
@@ -135,29 +137,58 @@ const GraphInfo = () => {
       <div id="mesChecks">
         <Checkbox name="all" value={selectedMonths.length === meses.length} updateValue={selectAllMeses}>Todos los meses</Checkbox>
         <div className="bg-white rounded-lg w-full flex flex-col p-2 overflow-y-scroll max-h-40 shadow">
-          {meses.map((item) => {
-            return <Checkbox key={item} name={item} value={selectedMonths.includes(item)} updateValue={handleSelectMeses}>{item}</Checkbox>
-          }) }
+          { userMembresia === 'pro' 
+          ? 
+          meses.map((item) => {
+              return <Checkbox key={item} name={item} value={selectedMonths.includes(item)} updateValue={handleSelectMeses}>{item}</Checkbox>
+            }) 
+          :
+            meses.slice(0,3).map((item) => {
+              return <Checkbox key={item} name={item} value={selectedMonths.includes(item)} updateValue={handleSelectMeses}>{item}</Checkbox>
+            }) 
+          }
         </div>
       </div>
 
       <div id="charts" className='p-5 rounded-sm border-solid'>
-        {
-          productos.filter( el => selectedProductos.includes(el)).map( (producto, index) => <Charts key={index} name={producto} 
-          meses={ 
-            precios
-            .filter( el => el.PRODUCTO == producto)
-            .sort((a, b) => new Date(a.FECHA).getTime() - new Date(b.FECHA).getTime())
-            .map( el => `${monthNames[parseInt(el.FECHA.slice(5,7))-1]} ${el.FECHA.slice(0,4)}` )
-          } 
-            
-          precio={
-            precios
-            .filter( el => el.PRODUCTO == producto )
-            .sort((a, b) => new Date(a.FECHA).getTime() - new Date(b.FECHA).getTime())
-            .map( el => el.PRECIO ) 
-          } 
-        />)}
+        { userMembresia === 'pro' 
+        ? 
+        productos.filter( el => selectedProductos.includes(el)).map( (producto, index) => 
+          <Charts key={index} name={producto} 
+            meses={ 
+              precios
+              .filter( el => el.PRODUCTO == producto)
+              .sort((a, b) => new Date(a.FECHA).getTime() - new Date(b.FECHA).getTime())
+              .map( el => `${monthNames[parseInt(el.FECHA.slice(5,7))-1]} ${el.FECHA.slice(0,4)}` )
+            } 
+              
+            precio={
+              precios
+              .filter( el => el.PRODUCTO == producto )
+              .sort((a, b) => new Date(a.FECHA).getTime() - new Date(b.FECHA).getTime())
+              .map( el => el.PRECIO ) 
+            } 
+          />)
+        :
+          productos.filter( el => selectedProductos.includes(el)).map( (producto, index) => 
+          <Charts key={index} name={producto} 
+            meses={ 
+              precios
+              .filter( el => el.PRODUCTO == producto)
+              .sort((a, b) => new Date(a.FECHA).getTime() - new Date(b.FECHA).getTime())
+              .map( el => `${monthNames[parseInt(el.FECHA.slice(5,7))-1]} ${el.FECHA.slice(0,4)}` )
+              .slice(0,3)
+            } 
+              
+            precio={
+              precios
+              .filter( el => el.PRODUCTO == producto )
+              .sort((a, b) => new Date(a.FECHA).getTime() - new Date(b.FECHA).getTime())
+              .map( el => el.PRECIO ) 
+              .slice(0,3)
+            } 
+          />)
+          }
       </div>
     </div>
 
