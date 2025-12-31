@@ -42,9 +42,9 @@ const App = () => {
           <Route
             path="/signup"
             element={
-              <ProtectedRoute>
+              <RedirectionRoute>
                 <Signup />
-              </ProtectedRoute>
+              </RedirectionRoute>
             }
           />
           <Route
