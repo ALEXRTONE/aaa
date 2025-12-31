@@ -47,6 +47,7 @@ class AuthService {
     localStorage.removeItem('validJWT');
     localStorage.removeItem('user');
     localStorage.removeItem('loggedin');
+    localStorage.removeItem('membresia');
     // TODO: redirect to the login page
 
   }

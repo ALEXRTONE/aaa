@@ -1,13 +1,14 @@
 import { Button, TextInput, HelperText } from "flowbite-react";
 import logo from '../assets/logo.png';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { type UserSignup } from "../interfaces/Users.js";
 import { apiSignup } from '../api/apiSignup.js';
 
 
 const Signup = () => {
-  const [userValidation, setUserValidation] = useState<boolean>(true)
+  const [userValidation, setUserValidation] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   const style = {
     card: {
@@ -35,13 +36,13 @@ const Signup = () => {
       fontWeight: 'bold',
       fontSize: '18pt'
     },
-  }
+  };
   
   const [signupData, setSignup] = useState<UserSignup>({
     username: '',
     password: '',
     email: ''
-  })
+  });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -59,9 +60,9 @@ const Signup = () => {
       const user = await apiSignup(signupData);
       
       if (!user) {
-        setUserValidation(false)
+        setUserValidation(false);
       } else {
-        window.location.assign('/login')
+        return navigate('/login');
       }
 
     } catch (error: any) {

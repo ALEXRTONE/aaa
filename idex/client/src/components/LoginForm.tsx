@@ -6,6 +6,7 @@ import { useState, type FormEvent, type ChangeEvent } from "react";
 import { login } from "../api/login.js";
 import auth from '../utils/auth.js'
 import { useAuth } from '../utils/AuthProvider.js';
+import { apiUser } from "../api/apiUsers";
 
 
 const style = {
@@ -40,16 +41,6 @@ export function LoginForm() {
 
   const { setIsAuth } = useAuth();
 
-//   useEffect(() => { 
-//     console.log('usado');
-//     if (resToken) {
-//       setTimeout(() => {
-//     console.log("Esto se ejecuta después de 2 segundos.");
-// }, 2000);
-//       navigate("/home", {replace: true});
-//       console.log('usado2');
-//     }
-//   }, [resToken])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -69,15 +60,14 @@ export function LoginForm() {
         localStorage.setItem('user',`${loginData.username}`);
 
         auth.saveLogin(res.token);
-        console.log('saveLogin 1: ', auth.loggedIn());
         
-         setTimeout(() => {}, 2000);
+        setTimeout(() => {}, 2000);
 
         localStorage.setItem('loggedin',`${auth.loggedIn()}`);
         setResToken(!!res.token);
 
-        console.log('es login 2: ', auth.loggedIn());
-        console.log('el token es: ', auth.getToken())
+        const user = await apiUser(loginData.username);
+        user ? localStorage.setItem('membresia', user.membresia) : localStorage.setItem('membresia', '');
 
         return <Navigate to="/home" replace />;
         
