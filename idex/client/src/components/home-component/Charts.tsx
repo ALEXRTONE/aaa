@@ -32,6 +32,7 @@ const Charts = (props: BienesData) => {
           display: true,
         },
       },
+      maintainAspectRatio: false 
     };
 
     const data = {
@@ -46,9 +47,9 @@ const Charts = (props: BienesData) => {
         }
 
     return (
-        <>
+        <div className="h-50 md:h-75 lg:h-100">
             <Line options={options} data={data} />
-        </>
+        </div>
     );
 }
 
