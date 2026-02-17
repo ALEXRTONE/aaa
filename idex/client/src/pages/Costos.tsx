@@ -1,15 +1,11 @@
-import LeftNavbar from "../components/LeftNavbar"
 import Header from '../components/Header';
-import { Card } from "flowbite-react";
+import { Card, Button } from "flowbite-react";
 import { useState, useEffect, type ChangeEvent } from "react";
 import { apiProductos, apiCostos, apiMeses } from "../api/apiCommodities.js";
 
 const style = {
     costos: {
-        width: '100%',
-        padding: '40px',
         background: 'rgb(237, 237, 237)',
-        marginLeft: '222px',
     },
     input: {
       border: '1px solid gray',
@@ -18,12 +14,6 @@ const style = {
       width: '5rem',
       marginBottom: '4px',
       marginRight: '4px',
-    },
-    datePick: {
-      marginLeft: '4px',
-      marginRight: '4px',
-      background:'white', 
-      color:'black'
     },
 }
 
@@ -120,19 +110,17 @@ const Costos = () => {
   };
 
   return (
-      <div style={{height: '100%'}}> 
-          <Header />
-          <div style={{height: '100%'}} className="flex flex-row">
-              <LeftNavbar />
-              <div className="costoMain justify-between" style={style.costos}>
-                  <Card id="card" className="flex flex-col absolute right-50 bottom-90 w-40">
-                    <p>Diferencia Porcentual Ponderada</p>
-                    <span>{`${porcentajePonderado}%`}</span>
-                  </Card>
-                  <h2 style={{fontSize: '24px', fontWeight: '700', marginBottom: '16px'}}>Estructura de costos personalizada</h2>
-                  <p className="">Selecciona los commodities y asigna su ponderación en tu estructura de costos.</p>
-                  <div className="flex flex-row my-4">
-                    <label className="mr-5">Selecciona la fecha inicial:</label>
+      <div> 
+        <Header/>
+        <div>
+            <div className='p-5' style={style.costos}>
+                <h2 style={{fontSize: '24px', fontWeight: '700', marginBottom: '16px'}}>Estructura de costos personalizada</h2>
+                <p className="">Selecciona los commodities y asigna su ponderación en tu estructura de costos.</p>
+
+                <div className="flex flex-wrap gap-3 my-4">
+
+                  <div className='flex gap-3'>
+                    <label>Selecciona la fecha inicial:</label>
                     <select className="bg-white rounded-sm border-1 border-gray-300" name="fechaInicial" id="fechaInicial" onChange={handleDateChange}>
                       <option>Seleccionar</option>
                       {
@@ -145,7 +133,10 @@ const Costos = () => {
                         })
                       }
                     </select>
-                    <label className="mx-5">Selecciona la fecha final:</label>
+                  </div>
+
+                  <div className='flex gap-3'>
+                    <label className="">Selecciona la fecha final:</label>
                     <select className="bg-white rounded-sm border-1 border-gray-300" name="fechaFinal" id="fechaFinal" onChange={handleDateChange}>
                       <option>Seleccionar</option>
                       {
@@ -159,21 +150,29 @@ const Costos = () => {
                       }
                     </select>
                   </div>
-                  <form onSubmit={handleSubmitForm}>
-                    {
-                      productos.map((producto, index) => {
-                        return (
-                          <div key={index} className="flex flex-row">
+
+                </div>
+                <form id='costosForm' className='' onSubmit={handleSubmitForm}>
+                  {
+                    productos.map((producto, index) => {
+                      return (
+                        <div key={index} className="lg:px-90 flex justify-between">
                           <label className="mr-1" htmlFor={producto}>{producto+': '}</label>
                           <input style={style.input} onChange={handleInputChange} id={producto} name={producto} type="number" step="0.001" placeholder='0' />
-                          </div>
-                        )
-                      }) 
-                    }
-                    <button type="submit" className="mt-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Calcular cambio total</button>
-                  </form>
-              </div>
-          </div>
+                        </div>
+                      )
+                    }) 
+                  }
+                </form>
+                <div className='flex flex-col gap-y-3 justify-center'>
+                  <Button form='costosForm' type="submit" className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:bg-gradient-to-bl focus:ring-cyan-300 dark:focus:ring-cyan-800">Calcular cambio total</Button>
+                  <Card id="card" className="mx-auto">
+                    <p>Diferencia Porcentual Ponderada</p>
+                    <span>{`${porcentajePonderado}%`}</span>
+                  </Card>
+                </div>
+            </div>
+        </div>
       </div>
 )
 }

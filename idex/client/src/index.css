@@ -19,6 +19,10 @@ body {
   padding: 0;
 }
 
+.bkgWhite {
+  background-color: white;
+}
+
 body {
   height: 100vh;
   width: 100vw;
@@ -34,20 +38,13 @@ body {
   background-color: #ededed;
 }
 
-.sidebar-nav {
-    padding: 10px;
-    height: 100%;
-    background-color: white;
-    height: 100vh;
-    position: fixed;
-}
 
-.sidebar-nav button {
+
+.sidebar-nav-button {
     text-wrap: nowrap;
-    display: block;
-    margin: 10px 0;
-    width: 100%;
-    padding: 10px;
+    color: black;
+    font-size: small;
+    padding: 1em;
     cursor: pointer;
     text-align: left;
     font-weight: bold;
@@ -58,6 +55,10 @@ body {
 
 .profileContainer * {
     margin-bottom: 16px;
+}
+
+.cardPerfil {
+  background-color: white;
 }
 
 #card {

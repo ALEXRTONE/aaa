@@ -9,10 +9,12 @@ import UserProfile from './pages/UserProfile';
 import Signup from './pages/Signup';
 import Costos from './pages/Costos'
 
+
 const App = () => {
   return (
     <CombinedProviders>
       <BrowserRouter>
+        {/* páginas */}
         <Routes>
           <Route path="/" element={<LandingPage/>}/>
           <Route

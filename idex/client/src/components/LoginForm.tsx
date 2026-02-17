@@ -1,5 +1,5 @@
 
-import { Button, TextInput } from "flowbite-react";
+import { Button, Spinner, TextInput } from "flowbite-react";
 import logo from '../assets/logo.png';
 import { Link, Navigate } from "react-router-dom";
 import { useState, type FormEvent, type ChangeEvent } from "react";
@@ -33,6 +33,8 @@ const style = {
 
 
 export function LoginForm() {
+  const [spinnerLoading, setSpinnerLoading] = useState(false);
+
   const [loginData, setLoginData] = useState({
     username: '',
     password: ''
@@ -53,6 +55,7 @@ export function LoginForm() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
+      setSpinnerLoading(true);
       const res = await login(loginData)
 
       if (res.token) {
@@ -69,8 +72,8 @@ export function LoginForm() {
         const user = await apiUser(loginData.username);
         user ? localStorage.setItem('membresia', user.membresia) : localStorage.setItem('membresia', '');
 
+        setSpinnerLoading(false);
         return <Navigate to="/home" replace />;
-        
       }
     } catch (error) {
       console.error('Failed to login', error);
@@ -91,7 +94,9 @@ console.log('useauthlogin: ', useAuth());
           <TextInput style={style.input} onChange={handleChange} name="password" id="password" type="password" placeholder="Contraseña" required />
         </div>
         <div className="flex flex-wrap justify-around">
-          <Button size="xl" className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:bg-gradient-to-bl focus:ring-cyan-300 dark:focus:ring-cyan-800" type="submit" onSubmit={handleSubmit}>Entrar</Button>
+          <Button size="xl" className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:bg-gradient-to-bl focus:ring-cyan-300 dark:focus:ring-cyan-800" type="submit" onSubmit={handleSubmit}>
+            {spinnerLoading ? <Spinner aria-label="Spinner button example" size="sm" light /> : 'Entrar'}
+          </Button>
           <Link to={'/signup'}>
             <Button size="xl" className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:bg-gradient-to-bl focus:ring-cyan-300 dark:focus:ring-cyan-800" type='button'>Crear cuenta</Button>
           </Link>

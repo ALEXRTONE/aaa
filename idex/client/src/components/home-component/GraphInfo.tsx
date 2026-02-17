@@ -131,8 +131,22 @@ const GraphInfo = () => {
   }
 
   return (
-  <>
-    <div className='p-14 h-screen w-[55%] ml-56'>
+  <div className="flex flex-col xl:flex-row-reverse w-screen">
+
+    <div className="h-fit px-4 xl:sticky xl:top-10 xl:w-1/3 xl:mr-2 xl:mx-0">
+      <div id="productosChecks" className="flex flex-col p-10 bg-zinc-50 rounded-[10px] border-l border-solid border-neutral-200 shadow-md mt-3">
+        <h3 className="font-bold text-xl m-y-4">
+          Seleccionar los commodities
+        </h3>
+        <Checkbox name="allProductos" value={ productos.length == selectedProductos.length } updateValue={selectAllProductos} >Todos los commodities</Checkbox>
+        <input id="buscadorCommodity" onChange={searcher} className="mb-2.5 w-full p-2 rounded-[8px] border border-solid border-neutral-300" type="text"></input>
+        <div className="flex flex-col overflow-y-scroll max-h-96">
+        {sectorComponent.map( (sector, i) => <SectorFilter key={i} search={searchInput} name={sector.name} products={selectedProductos} commodities={sector.commodity} handleSelectProductos={handleSelectProductos}/> )}
+        </div>
+      </div>
+    </div>
+    
+    <div className='p-14 h-screen w-screen'>
       <h2  className='mb-6 text-2xl font-bold' >Accesos a datos históricos</h2>
       <div id="mesChecks">
         <Checkbox name="all" value={selectedMonths.length === meses.length} updateValue={selectAllMeses}>Todos los meses</Checkbox>
@@ -192,17 +206,7 @@ const GraphInfo = () => {
       </div>
     </div>
 
-    <div id="productosChecks" className="sticky h-fit top-10 w-1/3 flex flex-col mr-2 p-10 bg-zinc-50 rounded-[10px] border-l border-solid border-neutral-200 shadow-md">
-      <h3 className="font-bold text-xl m-y-4">
-        Seleccionar los commodities
-      </h3>
-      <Checkbox name="allProductos" value={ productos.length == selectedProductos.length } updateValue={selectAllProductos} >Todos los commodities</Checkbox>
-      <input id="buscadorCommodity" onChange={searcher} className="mb-2.5 w-full p-2 rounded-[8px] border border-solid border-neutral-300" type="text"></input>
-      <div className="flex flex-col overflow-y-scroll">
-      {sectorComponent.map( (sector, i) => <SectorFilter key={i} search={searchInput} name={sector.name} products={selectedProductos} commodities={sector.commodity} handleSelectProductos={handleSelectProductos}/> )}
-      </div>
-    </div>
-  </>
+  </div>
   )
 }
 
