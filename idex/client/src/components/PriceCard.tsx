@@ -8,13 +8,14 @@ interface IPrice {
     filtros: string,
     acceso: string,
     soporte?: boolean,
-    link: string
+    linkPro: string,
+    linkGratis: string,
 }
 
 export function PriceCard(props: IPrice) {
   return (
-    <Card className="max-w-sm dark:bg-[#ffffffe6] border-l shadow-lg" style={{border: 'transparent'}}>
-      <h5 className="mb-4 text-xl font-medium text-gray-500 dark:text-gray-500">Plan {props.plan}</h5>
+    <Card className="dark:bg-[#ffffffe6] border-l shadow-lg" style={{border: 'transparent'}}>
+      <h2 className="mb-4 text-3xl font-bold text-slate-950">Plan {props.plan}</h2>
       <div className="flex items-baseline text-gray-900 dark:text-dark">
         <span className="text-3xl font-semibold">$</span>
         <span className="text-5xl font-bold tracking-tight">{props.precio}</span>
@@ -34,7 +35,7 @@ export function PriceCard(props: IPrice) {
               clipRule="evenodd"
             />
           </svg>
-          <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-500">{props.meses} meses de datos históricos.</span>
+          <span className="text-base font-normal leading-tight text-gray-500 dark:text-gray-500">+ {props.meses} meses de datos históricos.</span>
         </li>
         <li className="flex space-x-3">
           <svg
@@ -84,12 +85,21 @@ export function PriceCard(props: IPrice) {
           <span className="text-base font-normal leading-tight text-gray-500">Soporte prioritario</span>
         </li> : <></>}
       </ul>
-      <Link to={props.link}>
+      <Link to={props.linkPro}>
         <button
             type="button"
             className="inline-flex w-full justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900"
         >
             Escoger plan
+        </button>
+      </Link>
+
+      <Link to={props.linkGratis}>
+        <button
+            type="button"
+            className="inline-flex w-full justify-center rounded-lg bg-transparent px-5 py-2.5 text-center text-sm font-medium text-blue-700 hover:cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900"
+        >
+            Probar Gratis
         </button>
       </Link>
     </Card>

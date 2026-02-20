@@ -47,38 +47,37 @@ const Header = () => {
 
             <div className="flex flex-col md:items-center md:grid md:grid-cols-4 md:gap-4">
 
-                <NavbarLink active={loc.pathname=='/perfil'}>
-                  <Link className={`hover:text-blue-500 text-${loc.pathname=='/perfil'?"white":"black"} md:text-black`} to={'/perfil'}>👤 Perfil de usuario</Link>
-                </NavbarLink>
+              <NavbarLink active={loc.pathname=='/perfil'}>
+                <Link className={`hover:text-blue-500 text-${loc.pathname=='/perfil'?"white":"black"} md:text-black`} to={'/perfil'}>Perfil de usuario</Link>
+              </NavbarLink>
 
 
 
-                <NavbarLink active={loc.pathname=='/home'}>
-                  <Link className={`hover:text-blue-500 text-${loc.pathname=='/home'?"white":"black"} md:text-black`} to={'/home'}>📊 Datos Históricos</Link>
-                </NavbarLink>
+              <NavbarLink active={loc.pathname=='/home'}>
+                <Link className={`hover:text-blue-500 text-${loc.pathname=='/home'?"white":"black"} md:text-black`} to={'/home'}>Datos Históricos</Link>
+              </NavbarLink>
 
 
 
-                <NavbarLink active={loc.pathname=='/costos'}>
-                  <Link className={`hover:text-blue-500 text-${loc.pathname=='/costos'?"white":"black"} md:text-black`} to={"/costos"}>📈 Estructura de Costos</Link>
-                </NavbarLink>
+              <NavbarLink active={loc.pathname=='/costos'}>
+                <Link className={`hover:text-blue-500 text-${loc.pathname=='/costos'?"white":"black"} md:text-black`} to={"/costos"}>Estructura de Costos</Link>
+              </NavbarLink>
 
 
-
-                <Button className="mt-1" outline color="red" onClick={handleLogOut}>
-                    Cerrar sesión
-                </Button>
-
-
+              <Button className="mt-1" outline color="red" onClick={handleLogOut}>
+                  Cerrar sesión
+              </Button>
           </div>
 
           </NavbarCollapse>
 
         ) : (
           <NavbarCollapse>
-            <Button outline className="hover:bg-blue-500" color="blue">
-                Iniciar sesión
-            </Button>
+            <Link to="/login" >
+              <Button outline className="hover:bg-blue-500" color="blue">
+                  Iniciar sesión
+              </Button>
+            </Link>
           </NavbarCollapse>
         )}
       </Navbar>
