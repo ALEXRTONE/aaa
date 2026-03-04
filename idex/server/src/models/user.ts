@@ -8,6 +8,8 @@ interface UserAttributes {
   email: string;
   password: string;
   membresia?: string;
+  stripeCustomerId?: string;
+  stripeSubscriptionId?: string;
 }
 
 // Define the optional attributes for creating a new User
@@ -20,6 +22,8 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public email!: string;
   public password!: string;
   public membresia!: string;
+  public stripeCustomerId!: string;
+  public stripeSubscriptionId!: string;
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -61,6 +65,14 @@ export function UserFactory(sequelize: Sequelize): typeof User {
         type: DataTypes.STRING,
         allowNull: false,
         defaultValue: 'gratis'
+      },
+      stripeCustomerId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      stripeSubscriptionId: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
     },
     {

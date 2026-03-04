@@ -14,6 +14,7 @@ app.use(cors({
   credentials: true
 }));
 
+app.use('/stripe', express.raw({ type: 'application/json' })); // RAW first
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(routes);
