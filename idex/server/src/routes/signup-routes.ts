@@ -9,7 +9,7 @@ const createUser = async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
   try {
     const newUser = await User.create({ username, email, password });
-    res.status(201).json({username: newUser.username, email: newUser.email, membresia: newUser.membresia});
+    res.status(201).json({ id: newUser.id, username: newUser.username, email: newUser.email, membresia: newUser.membresia });
     
   } catch (error: any) {
     const err = error.errors.map((e:any) => e.message)

@@ -10,10 +10,11 @@ const PORT = process.env.PORT || 3001;
 app.use(express.static('../../client/dist'));
 
 app.use(cors({
-  origin: ['http://localhost:5173'],//, 'https://idex-backend-8rw0.onrender.com'],
+  origin: ['http://localhost:5173', 'https://idex-backend-8rw0.onrender.com'],
   credentials: true
 }));
 
+app.use('/stripe', express.raw({ type: 'application/json' })); // RAW first
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(routes);
